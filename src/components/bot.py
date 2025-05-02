@@ -1,6 +1,5 @@
 import json
 import os
-from idlelib.iomenu import encoding
 
 from dotenv import load_dotenv
 import telebot

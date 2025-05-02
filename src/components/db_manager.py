@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta
+
 from src.models import Base, engine, SessionLocal
 from src.models.user import User
-from datetime import datetime, timedelta
 
 
 LIMIT_DAYS = 30

@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, BigInteger, DateTime
 from datetime import datetime
+from sqlalchemy import Column, Integer, BigInteger, DateTime
 from . import Base
 
 class User(Base):
