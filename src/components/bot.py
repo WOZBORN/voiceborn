@@ -186,8 +186,9 @@ def text_handler(message):
                 allowed, used, total = db.has_enough_limit(user_id, text)
                 if not allowed:
                     bot.send_message(message.chat.id, f"❌ Лимит исчерпан.\n{used}/{total} символов использовано.\nДней до обнуления л\nПока воспользуйся gTTS /start")
-                    bot.send_message(message.chat.id, f"✅ Токенов для генерации достаточно:\n{used}/{total} символов использовано.\nПриступаю к генерации! Немного подождите...")
                     return
+                else:
+                    bot.send_message(message.chat.id, f"✅ Токенов для генерации достаточно:\n{used}/{total} символов использовано.\nПриступаю к генерации! Немного подождите...")
                 voice_id = user_data["voice_id"]
                 file_path = generate_audio(text, voice_id=voice_id, output_path=f"{user_id}_elevenlabs.mp3")
                 if os.path.exists(file_path):
