@@ -18,6 +18,9 @@ db.init_db()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 bot = telebot.TeleBot(BOT_TOKEN)
 
+# Получить owner_id из .env
+owner_id = os.environ.get("BOT_OWNER_TELEGRAM_ID")
+
 # Текст для сообщений бота:
 answers = json.load(open("src/answers.json", encoding="utf-8"))
 
@@ -38,8 +41,6 @@ user_states = {}
 def handle_exception(user: User, stage: str = "unknown"):
     import traceback
 
-    # Получить owner_id из .env
-    owner_id = os.environ.get("BOT_OWNER_TELEGRAM_ID")
     error_trace = traceback.format_exc()
 
     # Вывод в консоль
@@ -137,7 +138,7 @@ def choose_elevenlabs_voice(call: CallbackQuery, user_id: int):
 # --- Обработка текстовых сообщений ---
 
 @bot.message_handler(func=lambda message: True)
-def text_handler(message):
+def text_handler(message: Message):
     user_id = message.from_user.id
     text = message.text.strip()
 
@@ -197,8 +198,12 @@ def text_handler(message):
                     with open(file_path, "rb") as f:
                         bot.send_audio(message.chat.id, f)
                     os.remove(file_path)
-            except:
+            except Exception as e:
                 bot.send_message(message.chat.id, answers["error"])
+                if owner_id:
+                    bot.send_message(owner_id, f"❗ Ошибка в боте\n{e}")
+                    bot.send_message(message.chat.id, "Уведомил владельца!")
+                
 
     else:
         bot.send_message(message.chat.id, "Сначала выберите режим генерации через /start.")
